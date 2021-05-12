@@ -57,7 +57,10 @@ public class Step3Mapper extends Mapper<LongWritable, Text, FloatWritable, Text>
 	{
 		String[] split = value.toString().split("\t");
 		float rank = Float.parseFloat(split[1]);
-		String url = urls.get(split[0]);
+		String url = "";
+		if(urls.get(split[0]) != null){
+			url = urls.get(split[0]);
+		}
 		context.write(new FloatWritable(rank), new Text(url));
 	}
 	

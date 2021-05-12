@@ -16,25 +16,25 @@ public class PageRank {
 	
 	public static void main(String[] args) throws Exception
 	{
-		if (args.length != 8)
+		if (args.length != 7)
 		{
-			System.out.println("Give the arguments (expected 8) in this order : (inputpath, outputpath, datapath, dampingFactor, maxruns, mindiff, deleteoutput, showresults), found" + args.length);
+			System.out.println("Give the arguments (expected 7) in this order : (inputfilepath, outputpath, dampingFactor, maxruns, mindiff, deleteoutput, showresults), found" + args.length);
 			System.exit(1);
 		}
 
-		int maxRuns = Integer.parseInt(args[4]);
-		float dampingFactor = Float.parseFloat(args[3]);
-		float mindiff = Float.parseFloat(args[5]);
+		int maxRuns = Integer.parseInt(args[3]);
+		float dampingFactor = Float.parseFloat(args[2]);
+		float mindiff = Float.parseFloat(args[4]);
 
         //Delete output folder if already exists
 		FileSystem filesystem = FileSystem.get(new Configuration());
-		if (Boolean.parseBoolean(args[6]))
+		if (Boolean.parseBoolean(args[5]))
 		{
 			Path outputPath = new Path(args[1]);
 			if (filesystem.exists(outputPath))
 			{
 				System.out.println("Deleting Output directory..");
-				fs.delete(outputPath, true);
+				filesystem.delete(outputPath, true);
 			}
 		}
 		
@@ -60,10 +60,10 @@ public class PageRank {
 		}
 		
 		// Step 3
-		success = success && step3(args[1] + "/ranks" + maxRuns, args[1] + "/ranking", args[2]);
+		success = success && step3(args[1] + "/ranks" + maxRuns, args[1] + "/ranking", args[0]);
 		
 		// Show results if asked
-		if (Boolean.parseBoolean(args[7]))
+		if (Boolean.parseBoolean(args[6]))
 		{
 			showResults(filesystem, args[1] + "/ranking");
 		}
