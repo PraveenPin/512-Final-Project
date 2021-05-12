@@ -13,21 +13,20 @@ import org.apache.hadoop.io.*;
 
 public class PageRank {
 	
-	// args example = ["/input", "/output", "/input/pagerank_data.txt", "0.85", "5", "0.01", "true", "true"]
+	
 	public static void main(String[] args) throws Exception
 	{
 		if (args.length != 8)
 		{
-			System.out.println("Invalid arguments, expected 8 (inputpath, outputpath, datapath, df, maxruns, mindiff, deleteoutput, showresults).");
+			System.out.println("Arguments are not enough, expected 8 (inputpath, outputpath, datapath, df, maxruns, mindiff, deleteoutput, showresults), found" + args.length);
 			System.exit(1);
 		}
 
 		int maxRuns = Integer.parseInt(args[4]);
 		float dampingFactor = Float.parseFloat(args[3]);
 		float mindiff = Float.parseFloat(args[5]);
+
 		FileSystem fs = FileSystem.get(new Configuration());
-			
-		// Deleting the output folder if asked/needed
 		if (Boolean.parseBoolean(args[6]))
 		{
 			Path outputPath = new Path(args[1]);
@@ -52,10 +51,9 @@ public class PageRank {
 			float diff = calculateDiff(lastRanks, newRanks);
 			System.out.println("Run #" + (i + 1) + " finished (score diff: " + diff + ").");
 			
-			// If the diff is lower than the mindiff we stop the iterations
+			// If the diff is lower than the mindiff we stop the iterations Otherwise continue
 			if (diff < mindiff)
-				break;
-			// Otherwise continue
+				break; 
 			else
 				lastRanks = newRanks;
 		}

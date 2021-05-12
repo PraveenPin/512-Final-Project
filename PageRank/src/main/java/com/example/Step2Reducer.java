@@ -24,13 +24,11 @@ public class Step2Reducer extends Reducer<Text, Text, Text, Text>
 		{
 			String val = text.toString();
 			
-			// If it's the list
 			if (val.startsWith("["))
 			{
 				outlinks = val.substring(1);
 				continue;
 			}
-			// If it's a rank
 			else
 			{
 				totalRank += Float.parseFloat(val);

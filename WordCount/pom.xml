@@ -36,7 +36,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>ch.cern.awg.Driver</mainClass>
+							<mainClass>ch.cern.awg.WordCount</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

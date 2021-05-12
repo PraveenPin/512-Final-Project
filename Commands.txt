@@ -1,5 +1,16 @@
-hadoop jar <jar_name>.jar com.example.Driver sample1.txt out2
+// Run Wordcount for small data 
+cd WordCount
+hadoop jar target/WC-Final-0.jar com.example.Wordcount input/smallInput.txt smalldataOutput
+
+// Run Wordcount for large data data 
+cd WordCount
+hadoop jar target/WC-Final-0.jar com.example.Wordcount input/smallInput.txt largeDataOutput
 
 hadoop fs -ls
 
 hadoop fs -cat out2/pag....
+
+// Arguments example for Page rank 
+args example = ["/input", "/output", "/input/pagerank_data.txt", "0.85", "5", "0.01", "true", "true"]
+
+
