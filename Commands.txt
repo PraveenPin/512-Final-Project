@@ -12,13 +12,14 @@ hadoop jar target/WC-Final-0.jar com.example.Wordcount input/smallInput.txt larg
 
 //Run Page rank
 cd PageRank
-hadoop jar target/PageRank-0.jar com.example.PageRank  input/pagerank_data.txt pageRankOutput/ input/pagerank_data.txt  0.85 5 0.01 true true
+hadoop jar target/PageRank-0.jar com.example.PageRank  input/pagerank_data.txt pageRankOutput/  0.85 5 0.01 true true
 
+//Commands to see the output through command line 
 hadoop fs -ls
 
 hadoop fs -cat out2/pag....
 
 // Arguments example for Page rank 
-args example = ["/input", "/output", "/input/pagerank_data.txt", "0.85", "5", "0.01", "true", "true"]
+args example = ["/input/pagerank_data.txt", "/output", "0.85", "5", "0.01", "true", "true"]
 
 arg[6] = true means that it will delete output directory if already exists
