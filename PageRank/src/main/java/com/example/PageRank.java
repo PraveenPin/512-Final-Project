@@ -26,14 +26,15 @@ public class PageRank {
 		float dampingFactor = Float.parseFloat(args[3]);
 		float mindiff = Float.parseFloat(args[5]);
 
-		FileSystem fs = FileSystem.get(new Configuration());
+        //Delete output folder if already exists
+		FileSystem filesystem = FileSystem.get(new Configuration());
 		if (Boolean.parseBoolean(args[6]))
 		{
 			Path outputPath = new Path(args[1]);
-			if (fs.exists(outputPath))
+			if (filesystem.exists(outputPath))
 			{
 				System.out.println("Deleting /output..");
-				fs.delete(outputPath, true);
+				filesystem.delete(outputPath, true);
 			}
 		}
 		
@@ -41,13 +42,13 @@ public class PageRank {
 		boolean success = step1(args[0], args[1] + "/ranks0");
 		
 		// Step 2
-		HashMap<Integer, Float> lastRanks = getRanks(fs, args[1] + "/ranks0");
+		HashMap<Integer, Float> lastRanks = getRanks(filesystem, args[1] + "/ranks0");
 		for (int i = 0; i < maxRuns; i++) 
 		{
 			success = success && step2(args[1] + "/ranks" + i, args[1] + "/ranks" + (i + 1), dampingFactor);
 			
 			// Calculate diff of ranks
-			HashMap<Integer, Float> newRanks = getRanks(fs, args[1] + "/ranks" + (i + 1));
+			HashMap<Integer, Float> newRanks = getRanks(filesystem, args[1] + "/ranks" + (i + 1));
 			float diff = calculateDiff(lastRanks, newRanks);
 			System.out.println("Run #" + (i + 1) + " finished (score diff: " + diff + ").");
 			
@@ -64,7 +65,7 @@ public class PageRank {
 		// Show results if asked
 		if (Boolean.parseBoolean(args[7]))
 		{
-			showResults(fs, args[1] + "/ranking");
+			showResults(filesystem, args[1] + "/ranking");
 		}
 		
 		System.exit(success ? 0 : 1);
@@ -72,21 +73,25 @@ public class PageRank {
 	
 	private static boolean step1(String input, String output) throws Exception
 	{
+        // Instantiate configuration fro step 1
 		Configuration conf = new Configuration();
 		conf.set("mapreduce.fileoutputcommitter.marksuccessfuljobs", "false");
 
 		System.out.println("Step 1..");
+
+        //Instantiate job for step 1
 		Job job = Job.getInstance(conf, "Step 1");
 		job.setJarByClass(PageRank.class);
 		
+        //Set params of job
 		job.setMapperClass(Step1Mapper.class);
 		job.setMapOutputKeyClass(IntWritable.class);
 		job.setMapOutputValueClass(IntWritable.class);
-
 		job.setReducerClass(Step1Reducer.class);
 		job.setOutputKeyClass(IntWritable.class);
 		job.setOutputValueClass(Text.class);
 		
+        //Set input/output path 
 		FileInputFormat.addInputPath(job, new Path(input));
 		FileOutputFormat.setOutputPath(job, new Path(output));
 		
@@ -95,22 +100,26 @@ public class PageRank {
 	
 	private static boolean step2(String input, String output, float dampingFactor) throws Exception
 	{
+        //Instantiate configuration for step 2
 		Configuration conf = new Configuration();
 		conf.set("mapreduce.fileoutputcommitter.marksuccessfuljobs", "false");
 		conf.setFloat("df", dampingFactor);
 		
 		System.out.println("Step 2..");
+        
+        // Instantiate job for step 2
 		Job job = Job.getInstance(conf, "Step 2");
+
+        //Set job params 
 		job.setJarByClass(PageRank.class);
-		
 		job.setMapperClass(Step2Mapper.class);
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(Text.class);
-	
 		job.setReducerClass(Step2Reducer.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(Text.class);
 		
+        //Set input/output
 		FileInputFormat.addInputPath(job, new Path(input));
 		FileOutputFormat.setOutputPath(job, new Path(output));
 		
@@ -119,19 +128,24 @@ public class PageRank {
 
 	private static boolean step3(String input, String output, String urlsPath) throws Exception
 	{
+        // Instantiate configuration for step3
 		Configuration conf = new Configuration();
 		conf.set("mapreduce.fileoutputcommitter.marksuccessfuljobs", "false");
 		conf.set("urls_path", urlsPath);
 		
 		System.out.println("Step 3..");
+
+        // Instantiate job for step 3
 		Job job = Job.getInstance(conf, "Step 3");
+
+        //Set job params for step 3
 		job.setJarByClass(PageRank.class);
 		job.setSortComparatorClass(SortFloatComparator.class);
-		
 		job.setMapperClass(Step3Mapper.class);
 		job.setMapOutputKeyClass(FloatWritable.class);
 		job.setMapOutputValueClass(Text.class);
 		
+        //Set input/output
 		FileInputFormat.addInputPath(job, new Path(input));
 		FileOutputFormat.setOutputPath(job, new Path(output));
 		
