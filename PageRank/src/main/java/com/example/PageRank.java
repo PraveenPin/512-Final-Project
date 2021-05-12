@@ -18,7 +18,7 @@ public class PageRank {
 	{
 		if (args.length != 8)
 		{
-			System.out.println("Arguments are not enough, expected 8 (inputpath, outputpath, datapath, df, maxruns, mindiff, deleteoutput, showresults), found" + args.length);
+			System.out.println("Give the arguments (expected 8) in this order : (inputpath, outputpath, datapath, dampingFactor, maxruns, mindiff, deleteoutput, showresults), found" + args.length);
 			System.exit(1);
 		}
 
@@ -32,7 +32,7 @@ public class PageRank {
 			Path outputPath = new Path(args[1]);
 			if (fs.exists(outputPath))
 			{
-				System.out.println("Deleting /output..");
+				System.out.println("Deleting Output directory..");
 				fs.delete(outputPath, true);
 			}
 		}
@@ -97,7 +97,7 @@ public class PageRank {
 	{
 		Configuration conf = new Configuration();
 		conf.set("mapreduce.fileoutputcommitter.marksuccessfuljobs", "false");
-		conf.setFloat("df", dampingFactor);
+		conf.setFloat("dampingFactor", dampingFactor);
 		
 		System.out.println("Step 2..");
 		Job job = Job.getInstance(conf, "Step 2");
