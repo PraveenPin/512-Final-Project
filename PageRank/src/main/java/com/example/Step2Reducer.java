@@ -12,7 +12,7 @@ public class Step2Reducer extends Reducer<Text, Text, Text, Text>
 	@Override
 	protected void setup(Context context)
 	{
-		dampingFactor = context.getConfiguration().getFloat("df", 0.85f);
+		dampingFactor = context.getConfiguration().getFloat("dampingFactor", 0.85f);
 	}
 
 	public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException 

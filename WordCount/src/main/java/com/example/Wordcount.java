@@ -43,7 +43,7 @@ public class Wordcount extends Configured implements Tool {
 		Configuration configuration = new Configuration();
 
         //Instantiate a job
-	    Job job = Job.getInstance(configuration, "Your job name");
+	    Job job = Job.getInstance(configuration, "Hadoop Map reduce job");
 
         //Check that user should provide both input file and output directory 
         if (args.length < 2) {
